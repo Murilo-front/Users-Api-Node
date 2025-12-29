@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style/normalize.css" />
+    <link rel="stylesheet" href="style/loguin.css" />
+    <title>Loguin</title>
+  </head>
+  <body>
+    <form action="" id="loguinForm" class="formulario" autocomplete="off">
+      <fieldset class="fieldset">
+        <legend class="legenda">Loguin</legend>
+        <label class="label-usuario" for="input-nome">usuário</label>
+        <input type="text" name="nome" id="input-nome" required autofocus />
+        <label class="label" for="input-senha">senha</label>
+        <input
+          type="password"
+          name="senha"
+          id="input-senha"
+          minlength="6ch"
+          required
+        />
+        <div class="footer-form">
+          <div class="btn-footer">
+            <button type="submit" id="loguinBtn">loguin</button>
+            <a class="btn-cadastro" id="cadastroBtn" href="index.html"
+              ><b>cadastre-se</b></a
+            >
+          </div>
+          <a class="btn-senha" href="#" id="esqueceu-senha-btn"
+            >Esqueci minha senha</a
+          >
+        </div>
+      </fieldset>
+    </form>
+    <script type="module" src="src/modules/login/login.ts"></script>
+  </body>
+</html>
