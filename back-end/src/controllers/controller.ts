@@ -1,6 +1,7 @@
 import { userDisponivel, idAleatorio, idUser } from "./controller.cadastro";
 import { AppError } from "../erros/AppError";
-import { salvarUsuarios, usuarios } from "../database/database";
+import { userReadService } from "../database/services/userRead.service";
+import { userWriteService } from "../database/services/userWrite.service";
 
 export interface Usuario {
   id: number;
@@ -17,7 +18,7 @@ export class NewUser {
   constructor(
     private nome: string,
     private senha: string,
-    private email?: string
+    private email?: string,
   ) {}
 
   get getId() {
@@ -44,24 +45,21 @@ export class NewUser {
 export async function criaUser(
   nomeValor: string,
   senhaValor: string,
-  emailValor: string
+  emailValor: string,
 ) {
   let user = new NewUser(nomeValor, senhaValor, emailValor);
   let userInfo: Usuario = user.getUser;
-  let userIdInfo: number = user.getId;
 
   let cadastroNovo: boolean = true;
   let igualdade: string = "";
 
-  if (usuarios.length) {
+  const usuariosdb: Usuario[] | null = await userReadService.getAll();
+  if (usuariosdb.length) {
     // Manda informações do objeto para função que confirma se o cadastro já existe
-    [cadastroNovo, igualdade] = userDisponivel(userInfo);
+    [cadastroNovo, igualdade] = await userDisponivel(userInfo);
   }
   if (cadastroNovo) {
-    usuarios.push(userInfo);
-    ids.push(userIdInfo);
-    console.log(usuarios);
-    salvarUsuarios();
+    await userWriteService.create(userInfo);
     await idAleatorio();
     return userInfo;
   }
@@ -73,8 +71,9 @@ export async function procuraUser(userInfo: { nome: string; senha: string }) {
   let divergencia: string = "";
   let usuarioLogado: Usuario = { id: 0, nome: "", senha: "" };
 
-  if (usuarios.length) {
-    usuarios.forEach((usuario: Usuario) => {
+  const usuariosdb: Usuario[] | null = await userReadService.getAll();
+  if (usuariosdb.length) {
+    usuariosdb.forEach((usuario: Usuario) => {
       // Confere se pelo menos alguma das informações digitadas coincide com as armazenadas
       if (usuario.nome == userInfo.nome && usuario.senha != userInfo.senha) {
         divergencia = "senha";
@@ -105,33 +104,30 @@ export async function procuraUser(userInfo: { nome: string; senha: string }) {
 
 // Method DELETE
 export async function deletarConta(id: number) {
-  indexUsuario = usuarios.findIndex((usuario) => usuario.id === id);
-  if (indexUsuario < 0) {
+  let deleteuser = await userWriteService.delete(id);
+  if (deleteuser <= 0) {
     throw new AppError("Usuário não encontrado", 404);
   }
-  usuarios.splice(indexUsuario, 1);
-  salvarUsuarios();
   return;
 }
 
 // Method PATCH
-export function atualizaConta(
+export async function atualizaConta(
   id: number,
   nameInput: keyof Usuario,
-  infoAtualizada: string
+  infoAtualizada: string,
 ) {
-  indexUsuario = usuarios.findIndex((usuario) => usuario.id === id);
-  if (indexUsuario < 0) {
+  const dataUpdate = { [nameInput]: infoAtualizada };
+  const userUpdate = await userWriteService.update(id, dataUpdate);
+  if (!userUpdate) {
     throw new AppError("Usuário não encontrado", 404);
   }
-  // Atauliza no array as informações do usuario
-  (usuarios[indexUsuario]![nameInput] as string) = infoAtualizada;
-  salvarUsuarios();
-  return usuarios[indexUsuario];
+  return userUpdate;
 }
 
 // Method GET
 export async function recuperaUsers() {
+  const usuarios = await userReadService.getAll();
   if (!usuarios.length) {
     throw new AppError("Nenhum usuário cadastro", 204);
   }
@@ -140,12 +136,13 @@ export async function recuperaUsers() {
 
 // Method GET
 export async function recuperaUserLogin(usuarioId: number) {
+  const usuarios = await userReadService.getAll();
   if (usuarios.length) {
-    indexUsuario = usuarios.findIndex((usuario) => usuario.id === usuarioId);
-    if (indexUsuario < 0) {
+    const user = await userReadService.getById(usuarioId);
+    if (!user) {
       throw new AppError("Usuário não encontrado", 404);
     }
-    return usuarios[indexUsuario];
+    return user;
   }
   throw new AppError("Nenhum usuário cadastro", 204);
 }

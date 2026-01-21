@@ -6,8 +6,9 @@ import {
   recuperaUsers,
   atualizaConta,
   deletarConta,
+  Usuario,
 } from "../controllers/controller";
-import { Usuario } from "../database/database";
+// import { Usuario } from "../database/database";
 
 const router = express.Router();
 
@@ -30,7 +31,6 @@ router.get("/search", async (req, res, next) => {
       senha: req.query.senha as string,
     };
     const usuarioLogado = await procuraUser(usuario);
-    console.log("usuario logado: ", usuarioLogado);
 
     res.status(201).json(usuarioLogado);
   } catch (error) {
@@ -42,7 +42,7 @@ router.get("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
     const usuarioLogado: Usuario | undefined = await recuperaUserLogin(
-      parseInt(id)
+      parseInt(id),
     );
     res.status(201).json(usuarioLogado);
   } catch (error) {
@@ -59,16 +59,16 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.patch("/:id", (req, res, next) => {
+router.patch("/:id", async (req, res, next) => {
   try {
     const id = req.params.id;
     const [[nameInput, infoAtualizada]] = Object.entries(req.body) as [
-      [keyof Usuario, Usuario[keyof Usuario]]
+      [keyof Usuario, Usuario[keyof Usuario]],
     ];
-    const usuarioAtualizado: Usuario | undefined = atualizaConta(
+    const usuarioAtualizado: Usuario | null = await atualizaConta(
       parseInt(id),
       nameInput,
-      infoAtualizada as string
+      infoAtualizada as string,
     );
 
     console.log(usuarioAtualizado);
