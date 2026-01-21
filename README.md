@@ -39,6 +39,7 @@ alt="Captura de tela da tela de informações do usuário">
 - Express
 - TypeScript
 - CORS
+- SQLite
 - ts-node-dev (ambiente de desenvolvimento)
 
 ### Frontend
@@ -56,7 +57,7 @@ alt="Captura de tela da tela de informações do usuário">
 - Praticar uso de diferentes ambientes de desenvolvimento como `Vite` e `ts-node-dev`.
 - Uso do express para configuração de `rotas express`.
 - Reforço ao uso de requisições assincronas.
-- Pratica ao uso de arquivos `JSON` para configurações.
+- Pratica ao uso integrar `SQLite` com node
 
 ### 📲 Instalação
 
