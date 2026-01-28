@@ -1,9 +1,8 @@
-import { getUsuarioId, Usuario } from "../shared/shared.js";
+import { Usuario } from "../shared/shared.js";
 
 export async function userPatch(nameInput: string, infoAtualizada: string) {
   try {
-    const id = getUsuarioId()!;
-    const res = await fetch(`/users/${id}`, {
+    const res = await fetch(`/users/`, {
       method: "PATCH",
       headers: {
         "Content-type": "application/json; charset=UTF-8",

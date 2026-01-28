@@ -12,7 +12,7 @@
     // "types": [],
     // For nodejs:
     "lib": ["esnext", "DOM"],
-    "types": ["node"],
+    "types": ["node", "express-session"],
     // and npm install -D @types/node
 
     // Other Outputs
@@ -43,6 +43,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true
   },
-  "include": ["src/**/*"],
+  "include": ["back-end/src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

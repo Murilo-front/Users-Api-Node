@@ -19,15 +19,3 @@ export function removeEspaco() {
     });
   });
 }
-
-export function getUsuarioId(): number | null {
-  let usuarioSalvo = localStorage.getItem("usuarioLogado");
-  let usuarioDado: number | null = usuarioSalvo
-    ? JSON.parse(usuarioSalvo)
-    : null;
-  return usuarioDado ? usuarioDado : null;
-}
-
-export function setNewUsuario(usuarioId: number) {
-  localStorage.setItem("usuarioLogado", JSON.stringify(usuarioId));
-}

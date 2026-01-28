@@ -40,11 +40,13 @@ alt="Captura de tela da tela de informações do usuário">
 - TypeScript
 - CORS
 - ts-node-dev (ambiente de desenvolvimento)
+- Sessions
 
 ### Frontend
 
 - HTML5
 - CSS3
+- icomoon
 - Vite (ambiente de desenvolvimento front-end)
 
 ### Ferramentas de execução
@@ -57,6 +59,7 @@ alt="Captura de tela da tela de informações do usuário">
 - Uso do express para configuração de `rotas express`.
 - Reforço ao uso de requisições assincronas.
 - Pratica ao uso de arquivos `JSON` para configurações.
+- Uso de `sessions` para armazenamento de dados
 
 ### 📲 Instalação
 

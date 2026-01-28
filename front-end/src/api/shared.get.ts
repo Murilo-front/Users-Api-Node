@@ -18,9 +18,9 @@ export async function getSavedData() {
   }
 }
 
-export async function getUsuario(usuarioId: number) {
+export async function getUsuario() {
   try {
-    const res = await fetch(`/users/${usuarioId}`);
+    const res = await fetch(`/users/userLogin`);
 
     if (!res.ok) {
       const erro = await res.json();

@@ -136,13 +136,9 @@ export async function recuperaUsers() {
 
 // Method GET
 export async function recuperaUserLogin(usuarioId: number) {
-  const usuarios = await userReadService.getAll();
-  if (usuarios.length) {
-    const user = await userReadService.getById(usuarioId);
-    if (!user) {
-      throw new AppError("Usuário não encontrado", 404);
-    }
-    return user;
+  const user = await userReadService.getById(usuarioId);
+  if (!user) {
+    throw new AppError("Usuário não encontrado", 404);
   }
-  throw new AppError("Nenhum usuário cadastro", 204);
+  return user;
 }

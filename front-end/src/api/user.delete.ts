@@ -1,9 +1,6 @@
-import { getUsuarioId } from "../shared/shared.js";
-
 export async function userDelete() {
   try {
-    const id: number = getUsuarioId()!;
-    const res = await fetch(`/users/${id}`, {
+    const res = await fetch(`/users/`, {
       method: "DELETE",
     });
 

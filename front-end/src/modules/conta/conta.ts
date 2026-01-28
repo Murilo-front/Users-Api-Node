@@ -1,5 +1,5 @@
 import { DOM } from "../../shared/dom.js";
-import { removeEspaco, getUsuarioId } from "../../shared/shared.js";
+import { removeEspaco } from "../../shared/shared.js";
 import { getUsuario } from "../../api/shared.get.js";
 import {
   eventoBlur,
@@ -18,7 +18,7 @@ export let inputSelected: HTMLInputElement | null;
 removeEspaco();
 
 // Preenche os campos com as informações de cadastro
-getUsuario(getUsuarioId()!)
+getUsuario()
   .then((data) => {
     DOM.usuarioNome!.value = data!.nome as string;
     DOM.usuarioEmail!.value = data!.email as string;

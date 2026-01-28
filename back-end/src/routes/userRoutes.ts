@@ -1,4 +1,5 @@
 import express from "express";
+import { Request, Response, NextFunction } from "express";
 import {
   criaUser,
   procuraUser,
@@ -8,7 +9,6 @@ import {
   deletarConta,
   Usuario,
 } from "../controllers/controller";
-// import { Usuario } from "../database/database";
 
 const router = express.Router();
 
@@ -24,26 +24,29 @@ router.post("/", async (req, res, next) => {
   }
 });
 
-router.get("/search", async (req, res, next) => {
-  try {
-    const usuario = {
-      nome: req.query.nome as string,
-      senha: req.query.senha as string,
-    };
-    const usuarioLogado = await procuraUser(usuario);
+router.get(
+  "/search",
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const usuario = {
+        nome: req.query.nome as string,
+        senha: req.query.senha as string,
+      };
+      const usuarioLogado = await procuraUser(usuario);
 
-    res.status(201).json(usuarioLogado);
-  } catch (error) {
-    next(error);
-  }
-});
+      req.session.userId = usuarioLogado.id;
 
-router.get("/:id", async (req, res, next) => {
+      res.status(201).json(usuarioLogado);
+    } catch (error) {
+      next(error);
+    }
+  },
+);
+
+router.get("/userLogin", async (req, res, next) => {
   try {
-    const id = req.params.id;
-    const usuarioLogado: Usuario | undefined = await recuperaUserLogin(
-      parseInt(id),
-    );
+    const id = req.session.userId;
+    const usuarioLogado: Usuario | undefined = await recuperaUserLogin(id!);
     res.status(201).json(usuarioLogado);
   } catch (error) {
     next(error);
@@ -59,14 +62,14 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.patch("/:id", async (req, res, next) => {
+router.patch("/", async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const id = req.session.userId;
     const [[nameInput, infoAtualizada]] = Object.entries(req.body) as [
       [keyof Usuario, Usuario[keyof Usuario]],
     ];
     const usuarioAtualizado: Usuario | null = await atualizaConta(
-      parseInt(id),
+      id!,
       nameInput,
       infoAtualizada as string,
     );
@@ -78,10 +81,10 @@ router.patch("/:id", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", async (req, res, next) => {
+router.delete("/", async (req, res, next) => {
   try {
-    const id = req.params.id;
-    await deletarConta(parseInt(id));
+    const id = req.session.userId;
+    await deletarConta(id!);
     res.status(201).json("Usuario deletado");
   } catch (error) {
     next(error);

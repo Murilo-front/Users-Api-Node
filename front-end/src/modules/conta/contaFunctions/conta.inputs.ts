@@ -6,7 +6,6 @@ import {
   eventoEnter,
 } from "../user.contaEvents.js";
 import { getUsuario } from "../../../api/shared.get.js";
-import { getUsuarioId } from "../../../shared/shared.js";
 import { alteracaoConfirmada, alteracaoCancelada } from "./conta.alteracoes.js";
 
 export let novaSenhaVista: string;
@@ -37,7 +36,7 @@ export async function formataInputs(nameInput: string, valorDigitado?: string) {
         break;
     }
   } else {
-    const data = await getUsuario(getUsuarioId()!);
+    const data = await getUsuario();
 
     // Caso valor alterado mas não confirmado a alteração retorna valores originais
     switch (nameInput) {
