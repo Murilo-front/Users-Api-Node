@@ -8,8 +8,7 @@ import {
 import { getUsuario } from "../../../api/shared.get.js";
 import { alteracaoConfirmada, alteracaoCancelada } from "./conta.alteracoes.js";
 
-export let novaSenhaVista: string;
-export let novaSenhaEscondida: string;
+export let novaSenha: string;
 
 export async function formataInputs(nameInput: string, valorDigitado?: string) {
   // Caso confirmado alteração, atualiza inputs
@@ -22,17 +21,8 @@ export async function formataInputs(nameInput: string, valorDigitado?: string) {
         DOM.usuarioEmail!.value = valorDigitado;
         break;
       case "senha":
-        novaSenhaVista = valorDigitado;
-        // Esconde a senha dependendo da sitação do icone de olho
-        if (DOM.eyeIcon!.style.display != "none") {
-          novaSenhaEscondida = "";
-          for (let i = 0; i < valorDigitado.length; i++) {
-            novaSenhaEscondida += "*";
-          }
-          DOM.usuarioSenha!.value = novaSenhaEscondida;
-        } else {
-          DOM.usuarioSenha!.value = valorDigitado;
-        }
+        novaSenha = valorDigitado;
+        DOM.usuarioSenha!.value = "******";
         break;
     }
   } else {
@@ -47,15 +37,7 @@ export async function formataInputs(nameInput: string, valorDigitado?: string) {
         DOM.usuarioEmail!.value = data!.email as string;
         break;
       case "senha":
-        if (DOM.eyeIcon!.style.display != "none") {
-          novaSenhaEscondida = "";
-          for (let i = 0; i < data!.senha.length; i++) {
-            novaSenhaEscondida += "*";
-          }
-          DOM.usuarioSenha!.value = novaSenhaEscondida;
-        } else {
-          DOM.usuarioSenha!.value = data!.senha;
-        }
+        DOM.usuarioSenha!.value = "******";
         break;
     }
   }
@@ -64,9 +46,6 @@ export async function formataInputs(nameInput: string, valorDigitado?: string) {
 // Volta a formatação original
 export function formataDefault(input: HTMLInputElement): void {
   let editIcon = input.nextElementSibling as HTMLImageElement;
-  if (editIcon!.nodeName == "SPAN") {
-    editIcon! = editIcon!.firstElementChild as HTMLImageElement;
-  }
 
   let confirmIcon = editIcon!.nextElementSibling as HTMLImageElement;
   editIcon!.style.display = "block";

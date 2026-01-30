@@ -18,6 +18,11 @@ export function eventoChange(): void {
 
 export function eventoBlur(): void {
   formataDefault(inputSelected!);
+
+  let nameInput = inputSelected!.getAttribute("name");
+  if (nameInput == "senha") {
+    DOM.usuarioSenha!.value = "******";
+  }
 }
 
 export function eventoConfirm(): void {
@@ -35,9 +40,6 @@ export function eventoConfirm(): void {
 export function eventoEnter(event: any): void {
   let editIcon = inputSelected!.nextElementSibling;
 
-  if (editIcon!.nodeName == "SPAN") {
-    editIcon = editIcon!.firstElementChild;
-  }
   let confirmIcon = editIcon!.nextElementSibling;
   if (event.key == "Enter") {
     event.preventDefault();

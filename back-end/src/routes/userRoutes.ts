@@ -14,7 +14,6 @@ const router = express.Router();
 
 router.post("/", async (req, res, next) => {
   try {
-    console.log(req.body);
     const { nome, senha, email } = req.body;
     const usuario = await criaUser(nome, senha, email);
 
@@ -74,7 +73,6 @@ router.patch("/", async (req, res, next) => {
       infoAtualizada as string,
     );
 
-    console.log(usuarioAtualizado);
     res.status(201).json(usuarioAtualizado);
   } catch (error) {
     next(error);

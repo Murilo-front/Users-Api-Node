@@ -4,7 +4,6 @@ import { erroLoguin } from "../modules/login/user.login.js";
 export async function loginGet(params: URLSearchParams) {
   try {
     const res = await fetch(`/users/search?${params.toString()}`);
-
     if (!res.ok) {
       const erro = await res.json();
       erroLoguin(erro.message);

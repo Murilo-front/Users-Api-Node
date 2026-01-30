@@ -2,6 +2,8 @@ import { userDisponivel, idAleatorio, idUser } from "./controller.cadastro";
 import { AppError } from "../erros/AppError";
 import { userReadService } from "../database/services/userRead.service";
 import { userWriteService } from "../database/services/userWrite.service";
+import { verificaLogin } from "./controller.login";
+import bcrypt from "bcrypt";
 
 export interface Usuario {
   id: number;
@@ -59,6 +61,8 @@ export async function criaUser(
     [cadastroNovo, igualdade] = await userDisponivel(userInfo);
   }
   if (cadastroNovo) {
+    let hashSenha: string = await bcrypt.hash(userInfo.senha, 10);
+    userInfo.senha = hashSenha;
     await userWriteService.create(userInfo);
     await idAleatorio();
     return userInfo;
@@ -68,36 +72,16 @@ export async function criaUser(
 
 // Method GET
 export async function procuraUser(userInfo: { nome: string; senha: string }) {
-  let divergencia: string = "";
-  let usuarioLogado: Usuario = { id: 0, nome: "", senha: "" };
-
-  const usuariosdb: Usuario[] | null = await userReadService.getAll();
-  if (usuariosdb.length) {
-    usuariosdb.forEach((usuario: Usuario) => {
-      // Confere se pelo menos alguma das informações digitadas coincide com as armazenadas
-      if (usuario.nome == userInfo.nome && usuario.senha != userInfo.senha) {
-        divergencia = "senha";
-      } else if (
-        usuario.nome == userInfo.nome &&
-        usuario.senha == userInfo.senha
-      ) {
-        divergencia = "nenhuma";
-        usuarioLogado = usuario;
-      }
-    });
-    // Caso nennhuma informação coincida informa que a divergencia é o usuario
-    if (divergencia === "") {
-      divergencia = "usuario";
-    }
-  } else {
-    // Caso não tenha informações de cadastro
-    divergencia = "cadastro";
-  }
-
+  const [divergencia, userId] = await verificaLogin(userInfo);
   // Condicional de retorno
   if (divergencia !== "nenhuma") {
     throw new AppError(divergencia, 401);
   } else {
+    let usuarioLogado: Usuario = {
+      id: userId,
+      nome: userInfo.nome,
+      senha: userInfo.senha,
+    };
     return usuarioLogado;
   }
 }
@@ -118,6 +102,10 @@ export async function atualizaConta(
   infoAtualizada: string,
 ) {
   const dataUpdate = { [nameInput]: infoAtualizada };
+  if (nameInput == "senha") {
+    let newHashSenha: string = await bcrypt.hash(infoAtualizada, 10);
+    dataUpdate[nameInput] = newHashSenha;
+  }
   const userUpdate = await userWriteService.update(id, dataUpdate);
   if (!userUpdate) {
     throw new AppError("Usuário não encontrado", 404);

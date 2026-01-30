@@ -1,10 +1,6 @@
 import { DOM } from "../../../shared/dom.js";
 import { inputSelected } from "../conta.js";
-import {
-  formataInputs,
-  formataDefault,
-  novaSenhaVista,
-} from "./conta.inputs.js";
+import { formataInputs, formataDefault, novaSenha } from "./conta.inputs.js";
 import { fecharDialog, fecharConfirmDialog } from "./conta.dialogs.js";
 import { disponibilidade, validaInfo } from "./conta.valida.js";
 import { userPatch } from "../../../api/user.patch.js";
@@ -36,7 +32,7 @@ export async function alteracaoConfirmada() {
 
     if (nameInput === "senha") {
       // Se funão ativada, novaSenhaVista vai existir
-      valorDigitado = novaSenhaVista;
+      valorDigitado = novaSenha;
     }
 
     // Requisição pelo metodo PATCH

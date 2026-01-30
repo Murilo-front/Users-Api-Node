@@ -35,18 +35,21 @@ alt="Captura de tela da tela de informações do usuário">
 
 ### Backend
 
+- TypeScript
 - Node.js
 - Express
-- TypeScript
 - CORS
 - SQLite
-- ts-node-dev (ambiente de desenvolvimento)
+- Sequelize
 - Sessions
+- Bcrypt
+- ts-node-dev (ambiente de desenvolvimento)
 
 ### Frontend
 
 - HTML5
 - CSS3
+- TypeScript
 - icomoon
 - Vite (ambiente de desenvolvimento front-end)
 
@@ -58,10 +61,9 @@ alt="Captura de tela da tela de informações do usuário">
 
 - Praticar uso de diferentes ambientes de desenvolvimento como `Vite` e `ts-node-dev`.
 - Uso do express para configuração de `rotas express`.
-- Reforço ao uso de requisições assincronas.
-
-- Pratica ao uso de `SQLite` com node
-- Uso de `sessions` para armazenamento de dados
+- Praticar o uso do `bcrypt` para criptografia de senhas.
+- Pratica ao uso de `SQLite` com node a partir do `Sequelize`.
+- Uso de `sessions` para armazenamento de dados.
 
 ### 📲 Instalação
 
